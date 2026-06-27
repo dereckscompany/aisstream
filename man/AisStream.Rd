@@ -19,8 +19,8 @@ keep up. So \code{.dispatch()} does \strong{no} parsing on the data path: it emi
 string under \code{"message"}, and the \emph{only} inspection is a cheap \code{startsWith()}
 prefix check to route error frames (\code{{"error": ...}}) to the \code{"error"} event
 instead. Parse in your own handler if you must, but for the firehose the proven
-pattern is \code{\link[=record_to_ndjson]{record_to_ndjson()}} (append raw frames now, parse offline later with
-\code{\link[=parse_ais]{parse_ais()}}).
+pattern is \code{\link[=ndjson_sink]{ndjson_sink()}} — \verb{$on("message", ndjson_sink(dir))} (append raw frames
+now, parse offline later with \code{\link[=parse_ais]{parse_ais()}}).
 }
 
 \subsection{Bounding boxes}{
@@ -39,7 +39,7 @@ ais <- AisStream$new(
   bounding_boxes = list(list(min_lat = -90, min_lon = -180, max_lat = 90, max_lon = 180)),
   message_types = "PositionReport"
 )
-record_to_ndjson(ais, dir = "ais-data")
+ais$on("message", ndjson_sink(dir = "ais-data"))
 ais$on("error", function(e) message("AIS error: ", e))
 ais$run() # blocks, pumping the event loop; Ctrl-C to stop
 }

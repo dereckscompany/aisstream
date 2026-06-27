@@ -136,16 +136,15 @@ assert_return_ndjson_hour_path <- function(value) {
   return(value)
 }
 
-assert_args_record_to_ndjson <- function(ais, dir, flush_seconds) {
-  assert_class(ais, "AisStream")
+assert_args_ndjson_sink <- function(dir, flush_seconds) {
   assert_scalar_character(dir)
   assert_scalar_double(flush_seconds)
   assert_between(flush_seconds, lower = 0, lower_inclusive = FALSE, upper = Inf, upper_inclusive = FALSE)
   return(invisible(NULL))
 }
 
-assert_return_record_to_ndjson <- function(value) {
-  assert_class(value, "AisStream")
+assert_return_ndjson_sink <- function(value) {
+  assert_function(value)
   return(value)
 }
 
