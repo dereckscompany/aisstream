@@ -25,10 +25,9 @@ per-message JSON parse.
 So `aisstream` keeps the data path **parse-free**: `.dispatch()` emits
 each frame as the raw string and only does a cheap prefix check to split
 off error frames. You record the raw frames now (see
-[`record_to_ndjson()`](#recording)) and parse them offline. The
-connection machinery — the 3-second subscribe, reconnect-and-
-resubscribe, keepalive, the silence watchdog — all comes from
-`connectcore`.
+[`ndjson_sink()`](#recording)) and parse them offline. The connection
+machinery — the 3-second subscribe, reconnect-and- resubscribe,
+keepalive, the silence watchdog — all comes from `connectcore`.
 
 ## Installation
 
@@ -118,17 +117,17 @@ as_position_report(parse_ais(frame))
 
 ## Recording
 
-The proven “read fast or get dropped” pattern: wire the recorder before
-connecting, then run. It appends each raw frame to an hourly NDJSON file
-(rolling by UTC hour, flushing every few seconds) doing the minimum on
-the hot path.
+The proven “read fast or get dropped” pattern: `ndjson_sink()` returns a
+`"message"` handler you register Node-ws style, then run. It appends
+each raw frame to an hourly NDJSON file (rolling by UTC hour, flushing
+every few seconds) doing the minimum on the hot path.
 
 ``` r
 ais <- AisStream$new(
   bounding_boxes = list(list(min_lat = -90, min_lon = -180, max_lat = 90, max_lon = 180)),
   message_types = "PositionReport"
 )
-record_to_ndjson(ais, dir = "ais-data")
+ais$on("message", ndjson_sink(dir = "ais-data"))
 ais$run()
 ```
 

@@ -1,3 +1,33 @@
+# aisstream 0.0.2
+
+* **Recorder API reshaped: `record_to_ndjson()` → `ndjson_sink()`.** The recorder is
+  now a **message-handler factory** you register yourself, instead of a free function
+  that mutated the client by side effect:
+
+  ```r
+  # before
+  record_to_ndjson(ais, dir = "ais-data"); ais$run()
+  # after
+  ais$on("message", ndjson_sink("ais-data")); ais$run()
+  ```
+
+  `ndjson_sink(dir, flush_seconds = 5)` returns a `function(raw)` that, on each frame,
+  appends the raw string to the current hourly file, rolls the file on the turn of a
+  UTC hour, and flushes once per `flush_seconds` — all message-driven, with **no
+  separate `later` timer** and no dependency on the client. Durability is unchanged:
+  the durable write is the same, rotation is the same (`ais-YYYY-MM-DDTHH.ndjson` via
+  `ndjson_hour_path()`, which is kept), and the data-at-risk on an abrupt kill is
+  still bounded to roughly the last `flush_seconds`.
+
+  This is a **breaking** change, made deliberately pre-1.0 (the package has zero
+  adoption, so there is no deprecation shim). The motivation is idiom: the sink now
+  mirrors [`connectcore::ws_file_sink()`](https://github.com/dereckscompany/connectcore)
+  (a factory that returns a handler) and reads like Node — `ais$on("message", ...)` —
+  rather than a free function reaching into the client to wire handlers and a timer.
+
+* The unused `later` import is dropped (the sink no longer schedules on the `later`
+  loop).
+
 # aisstream 0.0.1
 
 Initial release. A thin R client for the [AISStream.io](https://aisstream.io) live

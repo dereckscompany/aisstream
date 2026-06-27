@@ -32,12 +32,14 @@ whole design — **the message hot path never parses**. `.dispatch()` emits each
 as the raw string and does only a cheap prefix check to split off error frames.
 
 The practical consequence: don't parse in the live handler. **Record the raw frames
-now, parse them offline.** That is exactly what `record_to_ndjson()` does.
+now, parse them offline.** That is exactly what `ndjson_sink()` does.
 
 ## The recorder
 
-`record_to_ndjson()` wires a durable recorder onto a client and returns the client so
-you can chain `$run()`:
+`ndjson_sink(dir)` returns a `"message"` handler — a `function(raw)` — that you
+register Node-ws style, just like
+[`connectcore::ws_file_sink()`](https://github.com/dereckscompany/connectcore). Wire
+it, then drive the loop with `$run()`:
 
 ```{r recorder, eval = FALSE}
 ais <- AisStream$new(
@@ -46,21 +48,20 @@ ais <- AisStream$new(
   message_types = "PositionReport"
 )
 
-record_to_ndjson(ais, dir = "ais-data", flush_seconds = 5)
+ais$on("message", ndjson_sink(dir = "ais-data", flush_seconds = 5))
 ais$run() # blocks, pumping the event loop; Ctrl-C to stop
 ```
 
 What it does, and why each part matters:
 
-- **Opens the first hourly file before any message arrives**, so there is never a
-  window where a frame has nowhere to go.
-- **Appends each raw frame** with `connectcore::ws_file_sink()` — a one-line write,
-  the minimum work, so the socket drains fast enough that the server never drops you.
-  One JSON frame per line (NDJSON).
-- **Flushes and rolls on the `later` loop**, not on the hot path. Every
-  `flush_seconds` it flushes the buffer to disk; on the turn of a UTC hour it closes
-  the current file and opens the next (`ais-YYYY-MM-DDTHH.ndjson`). A crash costs at
-  most the last unflushed window.
+- **Opens the hourly file on the first frame**, then appends each **raw** frame with a
+  one-line write — the minimum work, so the socket drains fast enough that the server
+  never drops you. One JSON frame per line (NDJSON).
+- **Rolls and flushes on the message itself**, not on a separate timer. On the turn of
+  a UTC hour the handler closes the current file and opens the next
+  (`ais-YYYY-MM-DDTHH.ndjson`); once `flush_seconds` have elapsed it flushes the
+  buffer to disk. Writes are append-only, so a crash costs at most the last unflushed
+  window, and the final partial buffer flushes on process exit.
 
 Files are named by UTC hour, and `ndjson_hour_path()` lets you predict the path:
 

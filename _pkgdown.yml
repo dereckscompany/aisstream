@@ -21,7 +21,7 @@ reference:
   - title: Recording
     desc: Durable NDJSON recording — read fast or get dropped.
     contents:
-      - record_to_ndjson
+      - ndjson_sink
       - ndjson_hour_path
   - title: Parsing
     desc: Offline parse helpers for recorded AIS frames.
