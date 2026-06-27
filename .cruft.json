@@ -1,0 +1,41 @@
+{
+  "template": "https://github.com/dereckscompany/templates-cookiecutter.git",
+  "commit": "928622e4b0d028309d653fb8d72bd6c0ac9fb2f9",
+  "checkout": "928622e4b0d028309d653fb8d72bd6c0ac9fb2f9",
+  "context": {
+    "cookiecutter": {
+      "package_name": "aisstream",
+      "package_title": "Live Vessel-Tracking Stream Client for AISStream.io",
+      "description": "A thin R client for the AISStream.io live vessel-tracking WebSocket feed, built on connectcore. Open one socket, subscribe with bounding boxes plus optional MMSI / message-type filters, and handle raw frames Node-ws style. Reconnect, re-subscribe, keepalive and a watchdog are inherited; parse helpers and an NDJSON recorder included.",
+      "author_given": "Dereck",
+      "author_family": "Mezquita",
+      "author_email": "dereck@mezquita.io",
+      "author_orcid": "0000-0002-9307-6762",
+      "github_org": "dereckscompany",
+      "license": "MIT",
+      "use_rcpp": false,
+      "_copy_without_render": [
+        "renv/*",
+        "renv.lock"
+      ],
+      "_template": "https://github.com/dereckscompany/templates-cookiecutter.git",
+      "_commit": "928622e4b0d028309d653fb8d72bd6c0ac9fb2f9"
+    }
+  },
+  "directory": "template-r-package",
+  "skip": [
+    "R/**",
+    "src/**",
+    "man/**",
+    "tests/testthat/**",
+    "vignettes/**",
+    "DESCRIPTION",
+    "NAMESPACE",
+    ".lintr",
+    "_pkgdown.yml",
+    "README.Rmd",
+    "inst/WORDLIST",
+    "renv/**",
+    "renv.lock"
+  ]
+}
