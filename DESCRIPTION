@@ -1,6 +1,6 @@
 Package: aisstream
 Title: Live Vessel-Tracking Stream Client for AISStream.io
-Version: 0.0.0.9000
+Version: 0.0.1
 URL: https://dereckscompany.github.io/aisstream,
     https://github.com/dereckscompany/aisstream
 BugReports: https://github.com/dereckscompany/aisstream/issues
@@ -10,11 +10,21 @@ Authors@R:
            role = c("aut", "cre"),
            email = "dereck@mezquita.io",
            comment = c(ORCID = "0000-0002-9307-6762"))
-Description: A thin R client for the AISStream.io live vessel-tracking WebSocket feed, built on connectcore. Open one socket, subscribe with bounding boxes plus optional MMSI / message-type filters, and handle raw frames Node-ws style. Reconnect, re-subscribe, keepalive and a watchdog are inherited; parse helpers and an NDJSON recorder included.
+Description: A thin R client for the AISStream.io live vessel-tracking WebSocket feed, built on connectcore. Open one socket, subscribe with bounding boxes plus optional MMSI / message-type filters, and handle raw frames Node-ws style. Reconnect, re-subscribe, keepalive and a watchdog are inherited; the message hot path is parse-free so the vendor never drops a slow reader, and parse helpers plus a durable NDJSON recorder are included.
 License: MIT
 Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
+Roxygen: list(markdown = TRUE, roclets = c("namespace", "rd", "roxyassert::contract_roclet"))
+Depends:
+    R (>= 4.1.0)
+Imports:
+    assert,
+    connectcore,
+    R6,
+    rlang,
+    jsonlite,
+    data.table,
+    later,
+    lubridate
 Suggests:
     box,
     covr,
@@ -26,7 +36,13 @@ Suggests:
     pkgdown,
     rcmdcheck,
     rmarkdown,
-    testthat (>= 3.0.0)
+    roxyassert,
+    testthat (>= 3.0.0),
+    withr
+Remotes:
+    dereckscompany/assert,
+    dereckscompany/connectcore@v0.0.1,
+    dereckscompany/roxyassert@v0.9.1
 VignetteBuilder: knitr
 Config/testthat/edition: 3
-
+Config/roxygen2/version: 8.0.0

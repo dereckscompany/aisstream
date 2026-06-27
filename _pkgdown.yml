@@ -14,13 +14,34 @@ navbar:
       aria-label: GitHub repository
 
 reference:
-  - title: R Functions
-    desc: Pure R functions
+  - title: Client
+    desc: The live vessel-tracking client.
     contents:
-      - add
+      - AisStream
+  - title: Recording
+    desc: Durable NDJSON recording — read fast or get dropped.
+    contents:
+      - record_to_ndjson
+      - ndjson_hour_path
+  - title: Parsing
+    desc: Offline parse helpers for recorded AIS frames.
+    contents:
+      - parse_ais
+      - parse_go_time
+      - ais_metadata
+      - as_position_report
+  - title: Subscription
+    desc: Building and validating the subscription frame.
+    contents:
+      - build_subscription
+      - normalise_bounding_box
+      - normalise_bounding_boxes
+  - title: Constants
+    contents:
+      - AIS_MESSAGE_TYPES
 
 articles:
   - title: Getting Started
     navbar: ~
     contents:
-      - demo
+      - recording-ais

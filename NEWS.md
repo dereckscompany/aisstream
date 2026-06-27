@@ -1,0 +1,32 @@
+# aisstream 0.0.1
+
+Initial release. A thin R client for the [AISStream.io](https://aisstream.io) live
+vessel-tracking (AIS) WebSocket feed, built on
+[connectcore](https://github.com/dereckscompany/connectcore). Open one socket,
+subscribe with bounding boxes plus optional MMSI / message-type filters, and handle
+raw frames Node-ws style — reconnect, re-subscribe, keepalive and a silence watchdog
+are all inherited from `connectcore::StreamClient`.
+
+* **`AisStream`** — the client (an R6 subclass of `connectcore::StreamClient`).
+  Construct it with an API key and bounding boxes, register handlers with
+  `$on(event, handler)`, then `$run()`. It overrides only two seams: `.resubscribe()`
+  (send the subscription frame on every (re)connect, meeting the server's 3-second
+  subscribe deadline) and `.dispatch()` (route `{"error": ...}` frames to the
+  `"error"` event). `$update_subscription()` swaps the live subscription
+  (swap-and-replace, ~1/sec).
+
+* **The hot path is parse-free.** AISStream closes a connection whose TCP read queue
+  backs up, and the whole-world firehose runs at ~300 msg/s — so `.dispatch()` does
+  **no** JSON parsing on the data path. It emits the raw string under `"message"`;
+  the only inspection is a cheap prefix check to split off error frames.
+
+* **`record_to_ndjson()`** — the durable "read fast or get dropped" recorder. Opens
+  an hourly NDJSON file before any frame, appends each raw frame with minimal work,
+  and flushes / rolls by UTC hour on the `later` loop. Parse the files offline.
+
+* **Parse helpers** — `parse_ais()` (JSON.parse for AIS), `parse_go_time()` (the Go
+  non-ISO `time_utc` format), and flatteners `ais_metadata()` /
+  `as_position_report()` for the stable common fields, plus the bounding-box and
+  subscription builders. `AIS_MESSAGE_TYPES` exports the 25 known type names. Every
+  argument and return is typed and runtime-checked with
+  [roxyassert](https://github.com/dereckscompany/roxyassert).
