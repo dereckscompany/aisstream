@@ -72,7 +72,14 @@ assert_args_ais_metadata <- function(parsed) {
 }
 
 assert_return_ais_metadata <- function(value) {
-  assert_class(value, "data.table")
+  assert_data_table(value)
+  assert_has_columns(value, c("message_type", "mmsi", "ship_name", "latitude", "longitude", "time_utc"))
+  assert_character(value[["message_type"]])
+  assert_character(value[["mmsi"]])
+  assert_character(value[["ship_name"]])
+  assert_double(value[["latitude"]])
+  assert_double(value[["longitude"]])
+  assert_datetime(value[["time_utc"]])
   return(value)
 }
 
@@ -82,7 +89,19 @@ assert_args_as_position_report <- function(parsed) {
 }
 
 assert_return_as_position_report <- function(value) {
-  assert_class(value, "data.table")
+  assert_data_table(value)
+  assert_has_columns(value, c("message_type", "mmsi", "ship_name", "latitude", "longitude", "time_utc", "sog", "cog", "true_heading", "nav_status", "rate_of_turn"))
+  assert_character(value[["message_type"]])
+  assert_character(value[["mmsi"]])
+  assert_character(value[["ship_name"]])
+  assert_double(value[["latitude"]])
+  assert_double(value[["longitude"]])
+  assert_datetime(value[["time_utc"]])
+  assert_double(value[["sog"]])
+  assert_double(value[["cog"]])
+  assert_double(value[["true_heading"]])
+  assert_double(value[["nav_status"]])
+  assert_double(value[["rate_of_turn"]])
   return(value)
 }
 

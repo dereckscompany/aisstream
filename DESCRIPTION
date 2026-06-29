@@ -1,6 +1,6 @@
 Package: aisstream
 Title: Live Vessel-Tracking Stream Client for AISStream.io
-Version: 0.0.2
+Version: 0.0.3
 URL: https://dereckscompany.github.io/aisstream,
     https://github.com/dereckscompany/aisstream
 BugReports: https://github.com/dereckscompany/aisstream/issues

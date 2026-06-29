@@ -59,7 +59,15 @@ parse_ais <- function(raw) {
 #' message type, so it is the safe denominator across the feed.
 #'
 #' @param parsed (list) one frame, already parsed by [parse_ais()].
-#' @return (class<data.table>) a one-row data.table of the common metadata.
+#' @return (data.table) a one-row data.table of the common metadata.
+#' - message_type (character | NA) the AIS message type (e.g. `"PositionReport"`);
+#'   `NA` when the frame omits it.
+#' - mmsi (character | NA) the vessel MMSI identifier; `NA` when absent.
+#' - ship_name (character | NA) the trimmed ship name; `NA` when absent.
+#' - latitude (numeric | NA) latitude in decimal degrees; `NA` when absent.
+#' - longitude (numeric | NA) longitude in decimal degrees; `NA` when absent.
+#' - time_utc (POSIXct | NA) the frame timestamp in UTC; `NA` when missing or
+#'   unparseable.
 #' @importFrom data.table data.table
 #' @export
 ais_metadata <- function(parsed) {
@@ -88,7 +96,22 @@ ais_metadata <- function(parsed) {
 #' across a mixed stream). The body lives under `Message$PositionReport`.
 #'
 #' @param parsed (list) one frame, already parsed by [parse_ais()].
-#' @return (class<data.table>) a one-row data.table of position fields plus metadata.
+#' @return (data.table) a one-row data.table of position fields plus metadata.
+#' - message_type (character | NA) the AIS message type (e.g. `"PositionReport"`);
+#'   `NA` when the frame omits it.
+#' - mmsi (character | NA) the vessel MMSI identifier; `NA` when absent.
+#' - ship_name (character | NA) the trimmed ship name; `NA` when absent.
+#' - latitude (numeric | NA) latitude in decimal degrees; `NA` when absent.
+#' - longitude (numeric | NA) longitude in decimal degrees; `NA` when absent.
+#' - time_utc (POSIXct | NA) the frame timestamp in UTC; `NA` when missing or
+#'   unparseable.
+#' - sog (numeric | NA) speed over ground (knots); `NA` for a non-position frame.
+#' - cog (numeric | NA) course over ground (degrees); `NA` for a non-position frame.
+#' - true_heading (numeric | NA) true heading (degrees); `NA` for a non-position
+#'   frame.
+#' - nav_status (numeric | NA) navigational status code; `NA` for a non-position
+#'   frame.
+#' - rate_of_turn (numeric | NA) rate of turn; `NA` for a non-position frame.
 #' @importFrom data.table set
 #' @export
 as_position_report <- function(parsed) {
