@@ -1,3 +1,7 @@
+# aisstream 0.0.3
+
+* **`data.table` shapes now documented per column.** The `@return` of `ais_metadata()` and `as_position_report()` now refines its `data.table` with typed nested bullets — one bullet per column carrying its roxyassert element type (`character | NA`, `numeric | NA`, `POSIXct | NA`) — instead of a bare prose description. Documenting the columns generates the matching `assert_has_columns()` and per-column contracts, so a flattener that emits the wrong column set or type is now caught at the boundary. Every column is nullable because each derives from a `*_or_na` coercion (or `parse_go_time()`, which yields `NA` on a missing or unparseable timestamp).
+
 # aisstream 0.0.2
 
 * **Recorder API reshaped: `record_to_ndjson()` → `ndjson_sink()`.** The recorder is

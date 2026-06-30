@@ -10,7 +10,17 @@ ais_metadata(parsed)
 \item{parsed}{(list) one frame, already parsed by \code{\link[=parse_ais]{parse_ais()}}.}
 }
 \value{
-(class<data.table>) a one-row data.table of the common metadata.
+(data.table) a one-row data.table of the common metadata.
+\itemize{
+\item message_type (character | NA) the AIS message type (e.g. \code{"PositionReport"});
+\code{NA} when the frame omits it.
+\item mmsi (character | NA) the vessel MMSI identifier; \code{NA} when absent.
+\item ship_name (character | NA) the trimmed ship name; \code{NA} when absent.
+\item latitude (numeric | NA) latitude in decimal degrees; \code{NA} when absent.
+\item longitude (numeric | NA) longitude in decimal degrees; \code{NA} when absent.
+\item time_utc (POSIXct | NA) the frame timestamp in UTC; \code{NA} when missing or
+unparseable.
+}
 }
 \description{
 Pulls the stable common fields from a parsed frame's \code{MetaData} (capital D) into a

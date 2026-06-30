@@ -10,7 +10,24 @@ as_position_report(parsed)
 \item{parsed}{(list) one frame, already parsed by \code{\link[=parse_ais]{parse_ais()}}.}
 }
 \value{
-(class<data.table>) a one-row data.table of position fields plus metadata.
+(data.table) a one-row data.table of position fields plus metadata.
+\itemize{
+\item message_type (character | NA) the AIS message type (e.g. \code{"PositionReport"});
+\code{NA} when the frame omits it.
+\item mmsi (character | NA) the vessel MMSI identifier; \code{NA} when absent.
+\item ship_name (character | NA) the trimmed ship name; \code{NA} when absent.
+\item latitude (numeric | NA) latitude in decimal degrees; \code{NA} when absent.
+\item longitude (numeric | NA) longitude in decimal degrees; \code{NA} when absent.
+\item time_utc (POSIXct | NA) the frame timestamp in UTC; \code{NA} when missing or
+unparseable.
+\item sog (numeric | NA) speed over ground (knots); \code{NA} for a non-position frame.
+\item cog (numeric | NA) course over ground (degrees); \code{NA} for a non-position frame.
+\item true_heading (numeric | NA) true heading (degrees); \code{NA} for a non-position
+frame.
+\item nav_status (numeric | NA) navigational status code; \code{NA} for a non-position
+frame.
+\item rate_of_turn (numeric | NA) rate of turn; \code{NA} for a non-position frame.
+}
 }
 \description{
 Combines the common metadata (see \code{\link[=ais_metadata]{ais_metadata()}}) with the stable fields of a
