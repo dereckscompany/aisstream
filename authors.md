@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/dereckscompany/aisstream/blob/fix/pkgdown-refresh-lock/inst/CITATION)
+[`inst/CITATION`](https://github.com/dereckscompany/aisstream/blob/v0.0.3/inst/CITATION)
 
 Mezquita D (2026). *aisstream: Live Vessel-Tracking Stream Client for
 AISStream.io*. R package version 0.0.3,
