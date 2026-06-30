@@ -1,0 +1,141 @@
+# Recording AIS
+
+## Read fast, or get dropped
+
+AISStream.io delivers AIS (vessel-tracking) messages over a single
+WebSocket. Two properties of the feed dictate how a client must behave:
+
+1.  **You must subscribe within three seconds** of connecting, or the
+    server closes the socket. The subscription is one JSON frame naming
+    your bounding boxes (and optional filters).
+2.  **The server watches your TCP read queue and closes the connection
+    if it backs up.** The whole-world feed runs at roughly 300 messages
+    a second. If your handler does real work per message — parsing JSON,
+    building a `data.table`, touching a database — the read queue grows
+    and you get dropped.
+
+`aisstream` answers both. The first is handled for you: `AisStream`
+re-sends the subscription on every (re)connect via `connectcore`’s
+`.resubscribe()` seam, so the 3-second deadline is always met, including
+after a reconnect. The second shapes the whole design — **the message
+hot path never parses**. `.dispatch()` emits each frame as the raw
+string and does only a cheap prefix check to split off error frames.
+
+The practical consequence: don’t parse in the live handler. **Record the
+raw frames now, parse them offline.** That is exactly what
+[`ndjson_sink()`](https://dereckscompany.github.io/aisstream/reference/ndjson_sink.md)
+does.
+
+## The recorder
+
+`ndjson_sink(dir)` returns a `"message"` handler — a `function(raw)` —
+that you register Node-ws style, just like
+[`connectcore::ws_file_sink()`](https://github.com/dereckscompany/connectcore).
+Wire it, then drive the loop with `$run()`:
+
+``` r
+
+ais <- AisStream$new(
+  # AISSTREAM_API_KEY is read from the environment by default
+  bounding_boxes = list(list(min_lat = -90, min_lon = -180, max_lat = 90, max_lon = 180)),
+  message_types = "PositionReport"
+)
+
+ais$on("message", ndjson_sink(dir = "ais-data", flush_seconds = 5))
+ais$run() # blocks, pumping the event loop; Ctrl-C to stop
+```
+
+What it does, and why each part matters:
+
+- **Opens the hourly file on the first frame**, then appends each
+  **raw** frame with a one-line write — the minimum work, so the socket
+  drains fast enough that the server never drops you. One JSON frame per
+  line (NDJSON).
+- **Rolls and flushes on the message itself**, not on a separate timer.
+  On the turn of a UTC hour the handler closes the current file and
+  opens the next (`ais-YYYY-MM-DDTHH.ndjson`); once `flush_seconds` have
+  elapsed it flushes the buffer to disk. Writes are append-only, so a
+  crash costs at most the last unflushed window, and the final partial
+  buffer flushes on process exit.
+
+Files are named by UTC hour, and
+[`ndjson_hour_path()`](https://dereckscompany.github.io/aisstream/reference/ndjson_hour_path.md)
+lets you predict the path:
+
+``` r
+
+ndjson_hour_path("ais-data", at = lubridate::ymd_hms("2024-03-15 09:42:11", tz = "UTC"))
+#> [1] "ais-data/ais-2024-03-15T09.ndjson"
+```
+
+## Parsing the recording offline
+
+Once recorded, parse at your leisure — this is where the JSON work
+belongs. Read a file line by line and turn each frame into a tidy row:
+
+``` r
+
+# A line as it would appear in a recorded NDJSON file.
+line <- paste0(
+  '{"MessageType":"PositionReport",',
+  '"MetaData":{"MMSI":368207620,"ShipName":"OCEAN TITAN  ",',
+  '"latitude":40.12,"longitude":-74.21,',
+  '"time_utc":"2022-12-29 18:22:32.318353 +0000 UTC"},',
+  '"Message":{"PositionReport":{"Sog":12.3,"Cog":89.1,',
+  '"TrueHeading":90,"NavigationalStatus":0,"RateOfTurn":-2}}}'
+)
+
+parsed <- parse_ais(line)
+as_position_report(parsed)
+#>      message_type      mmsi   ship_name latitude longitude            time_utc
+#>            <char>    <char>      <char>    <num>     <num>              <POSc>
+#> 1: PositionReport 368207620 OCEAN TITAN    40.12    -74.21 2022-12-29 18:22:32
+#>      sog   cog true_heading nav_status rate_of_turn
+#>    <num> <num>        <num>      <num>        <num>
+#> 1:  12.3  89.1           90          0           -2
+```
+
+[`parse_ais()`](https://dereckscompany.github.io/aisstream/reference/parse_ais.md)
+is deliberately generic (JSON.parse for AIS): it does not model the 25
+message bodies, because the AISStream API is in beta and its bodies
+shift. The flatteners
+([`ais_metadata()`](https://dereckscompany.github.io/aisstream/reference/ais_metadata.md),
+[`as_position_report()`](https://dereckscompany.github.io/aisstream/reference/as_position_report.md))
+model only the stable common fields, and
+[`parse_go_time()`](https://dereckscompany.github.io/aisstream/reference/parse_go_time.md)
+handles the Go-format `time_utc` (which is **not** ISO 8601) — note the
+sub-second precision is preserved:
+
+``` r
+
+parse_go_time("2022-12-29 18:22:32.318353 +0000 UTC")
+#> [1] "2022-12-29 18:22:32 UTC"
+```
+
+A whole file folds into one table by reading its lines and row-binding:
+
+``` r
+
+lines <- readLines("ais-data/ais-2024-03-15T09.ndjson")
+positions <- data.table::rbindlist(
+  lapply(lines, function(l) as_position_report(parse_ais(l))),
+  fill = TRUE
+)
+```
+
+## Changing the subscription live
+
+A re-sent subscription is a full **swap-and-replace** (not a merge),
+rate-limited to about once a second. `update_subscription()` replaces
+the stored parameters and, if the socket is open, re-sends immediately:
+
+``` r
+
+ais$update_subscription(
+  bounding_boxes = list(list(min_lat = 50, min_lon = -1.5, max_lat = 51, max_lon = 1.5))
+)
+```
+
+That is the whole pattern: subscribe with bounding boxes, record raw
+frames fast, parse offline. The connection lifecycle takes care of
+itself.

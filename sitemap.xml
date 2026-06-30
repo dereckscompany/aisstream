@@ -1,0 +1,23 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://dereckscompany.github.io/aisstream/404.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/LICENSE-text.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/articles/index.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/articles/recording-ais.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/authors.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/index.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/news/index.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/reference/AIS_MESSAGE_TYPES.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/reference/AisStream.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/reference/ais_metadata.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/reference/aisstream-package.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/reference/as_position_report.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/reference/build_subscription.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/reference/index.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/reference/ndjson_hour_path.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/reference/ndjson_sink.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/reference/normalise_bounding_box.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/reference/normalise_bounding_boxes.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/reference/parse_ais.html</loc></url>
+<url><loc>https://dereckscompany.github.io/aisstream/reference/parse_go_time.html</loc></url>
+</urlset>
+
