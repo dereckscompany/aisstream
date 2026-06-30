@@ -11,7 +11,7 @@
   "Packages": {
     "AsioHeaders": {
       "Package": "AsioHeaders",
-      "Version": "1.30.2.1",
+      "Version": "1.30.2-1",
       "Source": "Repository",
       "Repository": "CRAN"
     },
