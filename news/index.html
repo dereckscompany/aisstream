@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">aisstream</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,6 +35,13 @@
       <small>Source: <a href="https://github.com/dereckscompany/aisstream/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.1.0" id="aisstream-010">aisstream 0.1.0<a class="anchor" aria-label="anchor" href="#aisstream-010"></a></h2>
+<p>Modernise onto the released <code>connectcore</code> 0.3.0 and re-validate the WebSocket transport contract. aisstream was locked to <code>connectcore (&gt;= 0.0.1)</code> — the version that predates the <code>StreamClient</code> <code>is_open()</code> readyState fix — so the inherited open-check compared the <code>websocket</code> package’s <em>attributed</em> <code>readyState()</code> integer with <code>identical(., 1L)</code> and was <code>FALSE</code> even on an open socket, aborting every <code>send()</code> and throwing inside <code>.resubscribe()</code> so no subscription was ever sent (the silent-stall / 0-byte-capture failure mode). The floor bump carries connectcore’s 0.2.1 fix (<code>== 1L</code> value comparison) into the live client; no aisstream code change was needed to adopt it because the <code>StreamClient</code> subclass contract — the two overridden seams (<code>.dispatch()</code>, <code>.resubscribe()</code>) and the public <code>send()</code>/<code>is_open()</code>/<code>run()</code>/<code>on()</code> surface — is unchanged across 0.0.1 -&gt; 0.3.0.</p>
+<ul><li><p><strong><code>connectcore</code> Imports floor raised <code>0.0.1</code> -&gt; <code>0.3.0</code></strong> and <code>renv.lock</code> re-recorded (via <code><a href="https://rstudio.github.io/renv/reference/record.html" class="external-link">renv::record</a></code>, never <code>snapshot</code>) to <code>connectcore</code> 0.3.0 (<code>RemoteSha</code> <code>a0410fd</code>); the previously missing <code>data.table</code> runtime record (a direct import) is added so a <code><a href="https://rstudio.github.io/renv/reference/restore.html" class="external-link">renv::restore</a></code> install is complete.</p></li>
+<li><p><strong>WebSocket event names now reference <code><a href="https://rdrr.io/pkg/connectcore/man/WS_EVENTS.html" class="external-link">connectcore::WS_EVENTS</a></code>.</strong> <code>.dispatch()</code> emits <code>connectcore::WS_EVENTS$ERROR</code> / <code>connectcore::WS_EVENTS$MESSAGE</code> instead of the bare <code>"error"</code> / <code>"message"</code> string literals — the same wire values, sourced from connectcore’s exported constant rather than duplicated. The durable hourly-rolling <code><a href="../reference/ndjson_sink.html">ndjson_sink()</a></code> recorder is retained deliberately: it is a superset of connectcore’s single-line <code>ws_file_sink()</code> (UTC-hour rotation plus a flush timer that <code>ws_file_sink()</code> does not provide), and <code><a href="../reference/parse_go_time.html">parse_go_time()</a></code> parses AIS’s Go-format timestamp string, for which connectcore has no epoch-based equivalent.</p></li>
+<li><p>No documented surface changed, so the regenerated docs (roxygen 7.3.3) are byte-identical to the release and the master-vs-tip <code>@return</code> sweep is clean; the two <code>data.table</code> methods keep their typed column bullets. The <code>Config/roxygen2/version</code> / <code>RoxygenNote</code> 7.3.3 reconciliation and the CI gates were already landed by the infra convergence PR (<a href="https://github.com/dereckscompany/aisstream/issues/9" class="external-link">#9</a>), so this release does not touch them.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.3" id="aisstream-003">aisstream 0.0.3<a class="anchor" aria-label="anchor" href="#aisstream-003"></a></h2>
 <ul><li>

@@ -11,13 +11,13 @@ Source:
 [`inst/CITATION`](https://github.com/dereckscompany/aisstream/blob/master/inst/CITATION)
 
 Mezquita D (2026). *aisstream: Live Vessel-Tracking Stream Client for
-AISStream.io*. R package version 0.0.3,
+AISStream.io*. R package version 0.1.0,
 <https://dereckscompany.github.io/aisstream>.
 
     @Manual{aisstream-2026,
       title = {aisstream: Live Vessel-Tracking Stream Client for AISStream.io},
       author = {Dereck Mezquita},
       year = {2026},
-      note = {R package version 0.0.3},
+      note = {R package version 0.1.0},
       url = {https://dereckscompany.github.io/aisstream},
     }
