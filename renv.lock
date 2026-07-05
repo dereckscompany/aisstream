@@ -498,14 +498,14 @@
     },
     "connectcore": {
       "Package": "connectcore",
-      "Version": "0.0.1",
+      "Version": "0.3.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "dereckscompany",
       "RemoteRepo": "connectcore",
-      "RemoteRef": "v0.0.1",
-      "RemoteSha": "248e0ec4cb3075b3e806c411830618907a17a496"
+      "RemoteRef": "v0.3.0",
+      "RemoteSha": "a0410fd349aa924f431f4df9fcbf3c4fc91612af"
     },
     "covr": {
       "Package": "covr",
@@ -700,6 +700,12 @@
       "NeedsCompilation": "yes",
       "Author": "Jeroen Ooms [aut, cre] (ORCID: <https://orcid.org/0000-0002-4035-0289>), Hadley Wickham [ctb], Posit Software, PBC [cph]",
       "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
+      "Repository": "CRAN"
+    },
+    "data.table": {
+      "Package": "data.table",
+      "Version": "1.18.4",
+      "Source": "Repository",
       "Repository": "CRAN"
     },
     "desc": {
