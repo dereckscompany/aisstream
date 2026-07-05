@@ -18,7 +18,7 @@ Depends:
     R (>= 4.1.0)
 Imports:
     assert,
-    connectcore,
+    connectcore (>= 0.0.1),
     R6,
     rlang,
     jsonlite,
@@ -35,13 +35,14 @@ Suggests:
     pkgdown,
     rcmdcheck,
     rmarkdown,
-    roxyassert,
+    roxyassert (>= 0.9.1),
     testthat (>= 3.0.0),
     withr
 Remotes:
     dereckscompany/assert,
-    dereckscompany/connectcore@v0.0.1,
-    dereckscompany/roxyassert@v0.9.1
+    dereckscompany/connectcore,
+    dereckscompany/roxyassert
 VignetteBuilder: knitr
 Config/testthat/edition: 3
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 7.3.3
+RoxygenNote: 7.3.3

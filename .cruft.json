@@ -1,7 +1,7 @@
 {
   "template": "https://github.com/dereckscompany/templates-cookiecutter.git",
-  "commit": "928622e4b0d028309d653fb8d72bd6c0ac9fb2f9",
-  "checkout": "928622e4b0d028309d653fb8d72bd6c0ac9fb2f9",
+  "commit": "74ad5ab669ff92f5fcc1d6f33900429f897d351e",
+  "checkout": "74ad5ab669ff92f5fcc1d6f33900429f897d351e",
   "context": {
     "cookiecutter": {
       "package_name": "aisstream",
@@ -16,10 +16,11 @@
       "use_rcpp": false,
       "_copy_without_render": [
         "renv/*",
-        "renv.lock"
+        "renv.lock",
+        "scripts/*"
       ],
       "_template": "https://github.com/dereckscompany/templates-cookiecutter.git",
-      "_commit": "928622e4b0d028309d653fb8d72bd6c0ac9fb2f9"
+      "_commit": "74ad5ab669ff92f5fcc1d6f33900429f897d351e"
     }
   },
   "directory": "template-r-package",
@@ -31,7 +32,6 @@
     "vignettes/**",
     "DESCRIPTION",
     "NAMESPACE",
-    ".lintr",
     "_pkgdown.yml",
     "README.Rmd",
     "inst/WORDLIST",

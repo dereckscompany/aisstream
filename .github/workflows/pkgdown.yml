@@ -4,6 +4,9 @@
 # renv is the package manager everywhere: dependencies come from
 # renv.lock via setup-renv (pkgdown included as a dev dependency).
 on:
+  push:
+    branches: [master, main]
+  pull_request:
   release:
     types: [published]
   workflow_dispatch:
@@ -39,6 +42,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Deploy to GitHub pages
+        if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           clean: false
