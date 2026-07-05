@@ -171,9 +171,9 @@ AisStream <- R6::R6Class(
     # merely *starts* with "error" for the error key.
     .dispatch = function(raw) {
       if (startsWith(raw, "{\"error\"")) {
-        private$.emit("error", raw)
+        private$.emit(connectcore::WS_EVENTS$ERROR, raw)
       } else {
-        private$.emit("message", raw)
+        private$.emit(connectcore::WS_EVENTS$MESSAGE, raw)
       }
       return(invisible(NULL))
     }
