@@ -26,12 +26,12 @@ normalise_bounding_box <- function(box) {
     lons <- c(box[["min_lon"]], box[["max_lon"]])
   } else {
     if (length(box) != 2L) {
-      rlang::abort("Each bounding box must have exactly two corners (or be a named min/max list).")
+      abort_aisstream_validation_error("Each bounding box must have exactly two corners (or be a named min/max list).")
     }
     corner1 <- as.numeric(box[[1L]])
     corner2 <- as.numeric(box[[2L]])
     if (length(corner1) != 2L || length(corner2) != 2L) {
-      rlang::abort("Each bounding-box corner must be a length-2 c(lat, lon).")
+      abort_aisstream_validation_error("Each bounding-box corner must be a length-2 c(lat, lon).")
     }
     lats <- c(corner1[[1L]], corner2[[1L]])
     lons <- c(corner1[[2L]], corner2[[2L]])
@@ -39,13 +39,13 @@ normalise_bounding_box <- function(box) {
   lats <- as.numeric(lats)
   lons <- as.numeric(lons)
   if (anyNA(lats) || anyNA(lons)) {
-    rlang::abort("Bounding-box coordinates must be numeric and non-missing.")
+    abort_aisstream_validation_error("Bounding-box coordinates must be numeric and non-missing.")
   }
   if (any(lats < -90) || any(lats > 90)) {
-    rlang::abort("Bounding-box latitudes must lie in [-90, 90].")
+    abort_aisstream_validation_error("Bounding-box latitudes must lie in [-90, 90].")
   }
   if (any(lons < -180) || any(lons > 180)) {
-    rlang::abort("Bounding-box longitudes must lie in [-180, 180].")
+    abort_aisstream_validation_error("Bounding-box longitudes must lie in [-180, 180].")
   }
   out <- list(
     c(min(lats), min(lons)),
@@ -66,7 +66,7 @@ normalise_bounding_box <- function(box) {
 normalise_bounding_boxes <- function(bounding_boxes) {
   assert_args_normalise_bounding_boxes(bounding_boxes)
   if (length(bounding_boxes) == 0L) {
-    rlang::abort("`bounding_boxes` must contain at least one box.")
+    abort_aisstream_validation_error("`bounding_boxes` must contain at least one box.")
   }
   return(assert_return_normalise_bounding_boxes(lapply(bounding_boxes, normalise_bounding_box)))
 }
@@ -94,7 +94,7 @@ normalise_bounding_boxes <- function(bounding_boxes) {
 build_subscription <- function(api_key, bounding_boxes, message_types = NULL, ship_mmsi = NULL) {
   assert_args_build_subscription(api_key, bounding_boxes, message_types, ship_mmsi)
   if (!nzchar(api_key)) {
-    rlang::abort("`api_key` must be a non-empty string (set AISSTREAM_API_KEY or pass api_key).")
+    abort_aisstream_validation_error("`api_key` must be a non-empty string (set AISSTREAM_API_KEY or pass api_key).")
   }
   payload <- list(
     APIKey = api_key,
@@ -103,11 +103,11 @@ build_subscription <- function(api_key, bounding_boxes, message_types = NULL, sh
   if (!is.null(message_types) && length(message_types) > 0L) {
     types <- as.character(message_types)
     if (anyDuplicated(types) > 0L) {
-      rlang::abort("`message_types` must be unique (a duplicate is an AISStream server error).")
+      abort_aisstream_validation_error("`message_types` must be unique (a duplicate is an AISStream server error).")
     }
     unknown <- setdiff(types, unlist(AIS_MESSAGE_TYPES, use.names = FALSE))
     if (length(unknown) > 0L) {
-      rlang::abort(sprintf(
+      abort_aisstream_validation_error(sprintf(
         "Unknown message type(s): %s. See AIS_MESSAGE_TYPES.",
         paste(unknown, collapse = ", ")
       ))
@@ -119,7 +119,7 @@ build_subscription <- function(api_key, bounding_boxes, message_types = NULL, sh
   if (!is.null(ship_mmsi) && length(ship_mmsi) > 0L) {
     mmsi <- as.character(ship_mmsi)
     if (length(mmsi) > 50L) {
-      rlang::abort("`ship_mmsi` may contain at most 50 MMSI strings (AISStream limit).")
+      abort_aisstream_validation_error("`ship_mmsi` may contain at most 50 MMSI strings (AISStream limit).")
     }
     payload$FiltersShipMMSI <- I(mmsi)
   }

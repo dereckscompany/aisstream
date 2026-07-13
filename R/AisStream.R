@@ -82,7 +82,7 @@ AisStream <- R6::R6Class(
     ) {
       assert_args_AisStream__initialize(api_key, bounding_boxes, message_types, ship_mmsi, stale_timeout)
       if (!nzchar(api_key)) {
-        rlang::abort("`api_key` is empty; set AISSTREAM_API_KEY or pass api_key.")
+        abort_aisstream_validation_error("`api_key` is empty; set AISSTREAM_API_KEY or pass api_key.")
       }
       # Validate eagerly by building the frame once (also normalises the boxes).
       private$.bounding_boxes <- normalise_bounding_boxes(bounding_boxes)

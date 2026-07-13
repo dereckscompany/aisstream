@@ -4,7 +4,7 @@ linters: linters_with_defaults(
     object_name_linter = object_name_linter(styles = c("snake_case", "SNAKE_CASE", "CamelCase")),
     # Functions accepted as a valid exit under return_style = "explicit".
     # Add project-specific aborters here (e.g. abort_assertion).
-    return_linter = return_linter(return_style = "explicit", return_functions = c("abort", "cli_abort")),
+    return_linter = return_linter(return_style = "explicit", return_functions = c("abort", "cli_abort", "abort_aisstream_validation_error")),
     # lintr's default 30 — long descriptive names are fine.
     # (API-wrapper packages that mirror upstream field names sometimes set this
     # to NULL entirely.)
