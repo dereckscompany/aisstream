@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">aisstream</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,9 +32,18 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/dereckscompany/aisstream/blob/v0.1.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/dereckscompany/aisstream/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="aisstream-020">aisstream 0.2.0<a class="anchor" aria-label="anchor" href="#aisstream-020"></a></h2>
+<div class="section level3">
+<h3 id="typed-input-validation-conditions-0-2-0">Typed input-validation conditions<a class="anchor" aria-label="anchor" href="#typed-input-validation-conditions-0-2-0"></a></h3>
+<ul><li>The connector’s 11 non-transport <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">rlang::abort()</a></code> sites — a subscription argument or credential is malformed or violates a rule <em>before</em> any frame is sent (a bounding box that is not two corners, a coordinate outside its range, an empty api key, an unknown message type, more than 50 MMSI filters) — now signal a <strong>classed condition</strong> through a new <code>abort_aisstream_validation_error()</code> raiser (new <code>R/conditions.R</code>), so a caller branches on error <em>type</em> instead of grepping the message text. This follows the org convention (dereckscompany/tradebot-core#30; discussion “throw typed errors, not bare strings”).</li>
+<li>The class vector is <code>c("aisstream_validation_error", "aisstream_error")</code>. <code>aisstream_error</code> is the connector’s DOMAIN root, parallel to the transport <code>connectcore_error</code> root it inherits from <code><a href="https://rdrr.io/pkg/connectcore/man/StreamClient.html" class="external-link">connectcore::StreamClient</a></code>: a validation failure is not a transport failure, so the two roots never meet — exactly the <code>core_error</code> / <code>connectcore_error</code> split the fleet already uses. Transport failures (connect, reconnect, keepalive, a <code>$send()</code> on a closed socket) keep their inherited <code>connectcore_stream_error</code> / <code>connectcore_error</code> classes, and a server error FRAME is still emitted Node-ws style as a <code>WS_EVENTS$ERROR</code> event rather than raised.</li>
+<li>The message strings are <strong>byte-identical</strong> to the bare <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">rlang::abort()</a></code> calls they replaced (a reverse-substitution proves all 11 reproduce master exactly; golden tests pin two representative sites), so existing tests and downstream message greps keep matching. The classes are purely additive; <code><a href="https://rdrr.io/r/base/conditions.html" class="external-link">conditionMessage()</a></code> and <code>inherits(e, "error")</code> are unchanged. No behaviour changes.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="aisstream-010">aisstream 0.1.0<a class="anchor" aria-label="anchor" href="#aisstream-010"></a></h2>
 <p>Modernise onto the released <code>connectcore</code> 0.3.0 and re-validate the WebSocket transport contract. aisstream was locked to <code>connectcore (&gt;= 0.0.1)</code> — the version that predates the <code>StreamClient</code> <code>is_open()</code> readyState fix — so the inherited open-check compared the <code>websocket</code> package’s <em>attributed</em> <code>readyState()</code> integer with <code>identical(., 1L)</code> and was <code>FALSE</code> even on an open socket, aborting every <code>send()</code> and throwing inside <code>.resubscribe()</code> so no subscription was ever sent (the silent-stall / 0-byte-capture failure mode). The floor bump carries connectcore’s 0.2.1 fix (<code>== 1L</code> value comparison) into the live client; no aisstream code change was needed to adopt it because the <code>StreamClient</code> subclass contract — the two overridden seams (<code>.dispatch()</code>, <code>.resubscribe()</code>) and the public <code>send()</code>/<code>is_open()</code>/<code>run()</code>/<code>on()</code> surface — is unchanged across 0.0.1 -&gt; 0.3.0.</p>

@@ -1,5 +1,41 @@
 # Changelog
 
+## aisstream 0.2.0
+
+### Typed input-validation conditions
+
+- The connector’s 11 non-transport
+  [`rlang::abort()`](https://rlang.r-lib.org/reference/abort.html) sites
+  — a subscription argument or credential is malformed or violates a
+  rule *before* any frame is sent (a bounding box that is not two
+  corners, a coordinate outside its range, an empty api key, an unknown
+  message type, more than 50 MMSI filters) — now signal a **classed
+  condition** through a new `abort_aisstream_validation_error()` raiser
+  (new `R/conditions.R`), so a caller branches on error *type* instead
+  of grepping the message text. This follows the org convention
+  (dereckscompany/tradebot-core#30; discussion “throw typed errors, not
+  bare strings”).
+- The class vector is
+  `c("aisstream_validation_error", "aisstream_error")`.
+  `aisstream_error` is the connector’s DOMAIN root, parallel to the
+  transport `connectcore_error` root it inherits from
+  [`connectcore::StreamClient`](https://rdrr.io/pkg/connectcore/man/StreamClient.html):
+  a validation failure is not a transport failure, so the two roots
+  never meet — exactly the `core_error` / `connectcore_error` split the
+  fleet already uses. Transport failures (connect, reconnect, keepalive,
+  a `$send()` on a closed socket) keep their inherited
+  `connectcore_stream_error` / `connectcore_error` classes, and a server
+  error FRAME is still emitted Node-ws style as a `WS_EVENTS$ERROR`
+  event rather than raised.
+- The message strings are **byte-identical** to the bare
+  [`rlang::abort()`](https://rlang.r-lib.org/reference/abort.html) calls
+  they replaced (a reverse-substitution proves all 11 reproduce master
+  exactly; golden tests pin two representative sites), so existing tests
+  and downstream message greps keep matching. The classes are purely
+  additive;
+  [`conditionMessage()`](https://rdrr.io/r/base/conditions.html) and
+  `inherits(e, "error")` are unchanged. No behaviour changes.
+
 ## aisstream 0.1.0
 
 Modernise onto the released `connectcore` 0.3.0 and re-validate the
