@@ -3,7 +3,7 @@
 The proven "read fast or get dropped" recorder, as a **message-handler
 factory**. Returns a `function(raw)` you register yourself —
 `ais$on("message", ndjson_sink(dir))` — exactly the way you would use
-[`connectcore::ws_file_sink()`](https://rdrr.io/pkg/connectcore/man/ws_file_sink.html),
+[`connectcore::ws_file_sink()`](https://dereckscompany.github.io/connectcore/reference/ws_file_sink.html),
 so the sink is a pure handler with no dependency on the client and reads
 like Node.
 

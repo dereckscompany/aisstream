@@ -2,7 +2,7 @@
 
 An event-driven client for the [AISStream.io](https://aisstream.io) live
 AIS (vessel-tracking) WebSocket feed, built on
-[connectcore::StreamClient](https://rdrr.io/pkg/connectcore/man/StreamClient.html).
+[connectcore::StreamClient](https://dereckscompany.github.io/connectcore/reference/StreamClient.html).
 You construct it with an API key and one or more bounding boxes (plus
 optional MMSI / message-type filters), register handlers with
 `$on(event, handler)` exactly as in Node's `ws.on(...)`, then `$run()`
@@ -37,7 +37,7 @@ JS-object style) — or as raw nested corners
 
 ## Super class
 
-[`connectcore::StreamClient`](https://rdrr.io/pkg/connectcore/man/StreamClient.html)
+[`connectcore::StreamClient`](https://dereckscompany.github.io/connectcore/reference/StreamClient.html)
 -\> `AisStream`
 
 ## Methods
@@ -54,12 +54,12 @@ JS-object style) — or as raw nested corners
 
 Inherited methods
 
-- [`connectcore::StreamClient$close()`](https://rdrr.io/pkg/connectcore/man/StreamClient.html#method-close)
-- [`connectcore::StreamClient$connect()`](https://rdrr.io/pkg/connectcore/man/StreamClient.html#method-connect)
-- [`connectcore::StreamClient$is_open()`](https://rdrr.io/pkg/connectcore/man/StreamClient.html#method-is_open)
-- [`connectcore::StreamClient$on()`](https://rdrr.io/pkg/connectcore/man/StreamClient.html#method-on)
-- [`connectcore::StreamClient$run()`](https://rdrr.io/pkg/connectcore/man/StreamClient.html#method-run)
-- [`connectcore::StreamClient$send()`](https://rdrr.io/pkg/connectcore/man/StreamClient.html#method-send)
+- [`connectcore::StreamClient$close()`](https://dereckscompany.github.io/connectcore/reference/StreamClient.html#method-close)
+- [`connectcore::StreamClient$connect()`](https://dereckscompany.github.io/connectcore/reference/StreamClient.html#method-connect)
+- [`connectcore::StreamClient$is_open()`](https://dereckscompany.github.io/connectcore/reference/StreamClient.html#method-is_open)
+- [`connectcore::StreamClient$on()`](https://dereckscompany.github.io/connectcore/reference/StreamClient.html#method-on)
+- [`connectcore::StreamClient$run()`](https://dereckscompany.github.io/connectcore/reference/StreamClient.html#method-run)
+- [`connectcore::StreamClient$send()`](https://dereckscompany.github.io/connectcore/reference/StreamClient.html#method-send)
 
 ------------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ Initialise an AisStream client
 
 Validates and stores the subscription parameters, then constructs the
 underlying
-[connectcore::StreamClient](https://rdrr.io/pkg/connectcore/man/StreamClient.html)
+[connectcore::StreamClient](https://dereckscompany.github.io/connectcore/reference/StreamClient.html)
 against the AISStream endpoint. The subscription itself is sent by
 `.resubscribe()` after each (re)connect, so the 3-second subscribe
 deadline is met automatically.
@@ -118,7 +118,7 @@ deadline is met automatically.
 - `...`:
 
   further arguments passed to
-  [connectcore::StreamClient](https://rdrr.io/pkg/connectcore/man/StreamClient.html)'s
+  [connectcore::StreamClient](https://dereckscompany.github.io/connectcore/reference/StreamClient.html)'s
   constructor (e.g. `auto_reconnect`, `max_reconnects`,
   `proactive_reconnect`).
 

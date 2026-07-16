@@ -19,7 +19,7 @@
   `c("aisstream_validation_error", "aisstream_error")`.
   `aisstream_error` is the connector’s DOMAIN root, parallel to the
   transport `connectcore_error` root it inherits from
-  [`connectcore::StreamClient`](https://rdrr.io/pkg/connectcore/man/StreamClient.html):
+  [`connectcore::StreamClient`](https://dereckscompany.github.io/connectcore/reference/StreamClient.html):
   a validation failure is not a transport failure, so the two roots
   never meet — exactly the `core_error` / `connectcore_error` split the
   fleet already uses. Transport failures (connect, reconnect, keepalive,
@@ -63,7 +63,7 @@ because the `StreamClient` subclass contract — the two overridden seams
   install is complete.
 
 - **WebSocket event names now reference
-  [`connectcore::WS_EVENTS`](https://rdrr.io/pkg/connectcore/man/WS_EVENTS.html).**
+  [`connectcore::WS_EVENTS`](https://dereckscompany.github.io/connectcore/reference/WS_EVENTS.html).**
   `.dispatch()` emits `connectcore::WS_EVENTS$ERROR` /
   `connectcore::WS_EVENTS$MESSAGE` instead of the bare `"error"` /
   `"message"` string literals — the same wire values, sourced from
@@ -149,10 +149,10 @@ WebSocket feed, built on
 socket, subscribe with bounding boxes plus optional MMSI / message-type
 filters, and handle raw frames Node-ws style — reconnect, re-subscribe,
 keepalive and a silence watchdog are all inherited from
-[`connectcore::StreamClient`](https://rdrr.io/pkg/connectcore/man/StreamClient.html).
+[`connectcore::StreamClient`](https://dereckscompany.github.io/connectcore/reference/StreamClient.html).
 
 - **`AisStream`** — the client (an R6 subclass of
-  [`connectcore::StreamClient`](https://rdrr.io/pkg/connectcore/man/StreamClient.html)).
+  [`connectcore::StreamClient`](https://dereckscompany.github.io/connectcore/reference/StreamClient.html)).
   Construct it with an API key and bounding boxes, register handlers
   with `$on(event, handler)`, then `$run()`. It overrides only two
   seams: `.resubscribe()` (send the subscription frame on every

@@ -36,13 +36,13 @@ so the sink is a pure handler with no dependency on the client and reads like No
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>A durable hourly-NDJSON message sink</h1>
-      <small class="dont-index">Source: <a href="https://github.com/dereckscompany/aisstream/blob/v0.2.0/R/recorder.R" class="external-link"><code>R/recorder.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/dereckscompany/aisstream/blob/master/R/recorder.R" class="external-link"><code>R/recorder.R</code></a></small>
       <div class="d-none name"><code>ndjson_sink.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
     <p>The proven "read fast or get dropped" recorder, as a <strong>message-handler factory</strong>.
-Returns a <code>function(raw)</code> you register yourself — <code>ais$on("message", ndjson_sink(dir))</code> — exactly the way you would use <code><a href="https://rdrr.io/pkg/connectcore/man/ws_file_sink.html" class="external-link">connectcore::ws_file_sink()</a></code>,
+Returns a <code>function(raw)</code> you register yourself — <code>ais$on("message", ndjson_sink(dir))</code> — exactly the way you would use <code><a href="https://dereckscompany.github.io/connectcore/reference/ws_file_sink.html" class="external-link">connectcore::ws_file_sink()</a></code>,
 so the sink is a pure handler with no dependency on the client and reads like Node.</p>
     </div>
 
