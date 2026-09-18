@@ -68,7 +68,7 @@ ais <- AisStream$new(
     list(c(50.0, -1.5), c(51.0, 1.5))
   ),
   message_types = "PositionReport",
-  ship_mmsi = c("366998510", "367123450")
+  ship_mmsi = c("999999999", "999999998")
 )
 
 # The exact JSON sent on (re)connect — APIKey + BoundingBoxes always, filters only
@@ -111,7 +111,7 @@ and is parsed specially.
 ```{r parse}
 frame <- paste0(
   '{"MessageType":"PositionReport",',
-  '"MetaData":{"MMSI":368207620,"ShipName":"OCEAN TITAN  ",',
+  '"MetaData":{"MMSI":999999999,"ShipName":"OCEAN TITAN  ",',
   '"latitude":40.12,"longitude":-74.21,',
   '"time_utc":"2022-12-29 18:22:32.318353 +0000 UTC"},',
   '"Message":{"PositionReport":{"Sog":12.3,"Cog":89.1,',
