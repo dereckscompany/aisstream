@@ -78,7 +78,7 @@ file line by line and turn each frame into a tidy row:
 # A line as it would appear in a recorded NDJSON file.
 line <- paste0(
   '{"MessageType":"PositionReport",',
-  '"MetaData":{"MMSI":368207620,"ShipName":"OCEAN TITAN  ",',
+  '"MetaData":{"MMSI":999999999,"ShipName":"OCEAN TITAN  ",',
   '"latitude":40.12,"longitude":-74.21,',
   '"time_utc":"2022-12-29 18:22:32.318353 +0000 UTC"},',
   '"Message":{"PositionReport":{"Sog":12.3,"Cog":89.1,',

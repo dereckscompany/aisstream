@@ -1,3 +1,14 @@
+# aisstream 0.2.2
+
+## Replaced the remaining real-format MMSIs in the rendered docs
+
+v0.2.1 replaced the real-format MMSI `368207620` in the offline parse test fixture (`tests/testthat/test-helpers_parse.R`) but missed the same value — and two more, `366998510` and `367123450` — still carried in `README.Rmd`/`README.md` and the `recording-ais` vignette.
+
+* Replaced `368207620` with the canonical fake `999999999` in `README.Rmd` (and the regenerated `README.md`) and in `vignettes/recording-ais.Rmd`; kept the invented ship name "OCEAN TITAN" unchanged.
+* Replaced the two-vessel `ship_mmsi` filter example in `README.Rmd`/`README.md` — `c("366998510", "367123450")`, both syntactically valid US-prefixed (MID 366/367) numbers, i.e. the format of real vessels — with two distinct all-nines fakes, `c("999999999", "999999998")`.
+* Confirmed no other real-format MMSI remains under `README.Rmd`, `vignettes/`, the `R/` roxygen examples, or `inst/`.
+* No code change; documentation only.
+
 # aisstream 0.2.1
 
 ## Replaced a real-format MMSI in the offline parse fixtures

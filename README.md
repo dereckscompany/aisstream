@@ -70,13 +70,13 @@ ais <- AisStream$new(
     list(c(50.0, -1.5), c(51.0, 1.5))
   ),
   message_types = "PositionReport",
-  ship_mmsi = c("366998510", "367123450")
+  ship_mmsi = c("999999999", "999999998")
 )
 
 # The exact JSON sent on (re)connect — APIKey + BoundingBoxes always, filters only
 # when non-empty (an empty filter is omitted, never sent as []).
 cat(ais$subscription_frame())
-#> {"APIKey":"DEMO-KEY","BoundingBoxes":[[[40.4,-74.3],[41,-73.7]],[[50,-1.5],[51,1.5]]],"FilterMessageTypes":["PositionReport"],"FiltersShipMMSI":["366998510","367123450"]}
+#> {"APIKey":"DEMO-KEY","BoundingBoxes":[[[40.4,-74.3],[41,-73.7]],[[50,-1.5],[51,1.5]]],"FilterMessageTypes":["PositionReport"],"FiltersShipMMSI":["999999999","999999998"]}
 ```
 
 Filters are omitted entirely when empty:
@@ -115,7 +115,7 @@ common fields into a `data.table`. The `time_utc` field arrives in Go’s
 ``` r
 frame <- paste0(
   '{"MessageType":"PositionReport",',
-  '"MetaData":{"MMSI":368207620,"ShipName":"OCEAN TITAN  ",',
+  '"MetaData":{"MMSI":999999999,"ShipName":"OCEAN TITAN  ",',
   '"latitude":40.12,"longitude":-74.21,',
   '"time_utc":"2022-12-29 18:22:32.318353 +0000 UTC"},',
   '"Message":{"PositionReport":{"Sog":12.3,"Cog":89.1,',
@@ -125,7 +125,7 @@ frame <- paste0(
 as_position_report(parse_ais(frame))
 #>      message_type      mmsi   ship_name latitude longitude            time_utc
 #>            <char>    <char>      <char>    <num>     <num>              <POSc>
-#> 1: PositionReport 368207620 OCEAN TITAN    40.12    -74.21 2022-12-29 18:22:32
+#> 1: PositionReport 999999999 OCEAN TITAN    40.12    -74.21 2022-12-29 18:22:32
 #>      sog   cog true_heading nav_status rate_of_turn
 #>    <num> <num>        <num>      <num>        <num>
 #> 1:  12.3  89.1           90          0           -2
