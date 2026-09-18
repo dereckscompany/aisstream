@@ -1,3 +1,14 @@
+# aisstream 0.2.1
+
+## Replaced a real-format MMSI in the offline parse fixtures
+
+`tests/testthat/test-helpers_parse.R`'s representative `PositionReport` frame used MMSI `368207620` — a syntactically valid, US-prefixed (MID 368) vessel identifier, i.e. the format of a real ship's number, paired with the invented ship name "OCEAN TITAN". Nothing about the parser cares what the digits are (`mmsi` is carried through as a plain `character | NA` field with no format or checksum validation), so the fixture gains nothing from looking genuine.
+
+* Replaced `368207620` with `999999999`, a canonical fake MMSI (all-nines, not a real assigned prefix), across all three occurrences in the file (the raw JSON fixture string, the parsed-list assertion, and the flattened-row assertion).
+* Kept the invented ship name "OCEAN TITAN" unchanged.
+* Confirmed no other test file in the package asserts on the old number.
+* No code change; test fixture only.
+
 # aisstream 0.2.0
 
 ## Typed input-validation conditions

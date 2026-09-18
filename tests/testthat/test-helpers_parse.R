@@ -3,7 +3,7 @@
 # A representative PositionReport frame (the shape AISStream delivers).
 position_frame <- paste0(
   '{"MessageType":"PositionReport",',
-  '"MetaData":{"MMSI":368207620,"ShipName":"OCEAN TITAN  ",',
+  '"MetaData":{"MMSI":999999999,"ShipName":"OCEAN TITAN  ",',
   '"latitude":40.12,"longitude":-74.21,',
   '"time_utc":"2022-12-29 18:22:32.318353 +0000 UTC"},',
   '"Message":{"PositionReport":{"Sog":12.3,"Cog":89.1,',
@@ -14,7 +14,7 @@ test_that("parse_ais is JSON.parse for AIS (nested list, predictable shape)", {
   p <- parse_ais(position_frame)
   expect_type(p, "list")
   expect_identical(p$MessageType, "PositionReport")
-  expect_identical(p$MetaData$MMSI, 368207620L)
+  expect_identical(p$MetaData$MMSI, 999999999L)
   expect_identical(p$Message$PositionReport$Sog, 12.3)
 })
 
@@ -56,7 +56,7 @@ test_that("ais_metadata flattens the common fields to one tidy row", {
   expect_s3_class(dt, "data.table")
   expect_identical(nrow(dt), 1L)
   expect_identical(dt$message_type, "PositionReport")
-  expect_identical(dt$mmsi, "368207620")
+  expect_identical(dt$mmsi, "999999999")
   expect_identical(dt$ship_name, "OCEAN TITAN") # trimmed
   expect_equal(dt$latitude, 40.12)
   expect_equal(dt$longitude, -74.21)
