@@ -5,19 +5,19 @@
 
 <!-- badges: end -->
 
-**In plain terms:** Ships at sea constantly broadcast who they are and
-where they are, a public signal called AIS. This package opens a live
-connection to a feed of those broadcasts and hands them to your R
-program as they arrive, so you can watch vessel positions in
-near-real-time — narrowed to the sea areas, ships, or message kinds you
-care about — and write the raw stream straight to disk to study later.
-For a trading system it is an alternative-data source: the movement of
-tankers, bulk carriers and container ships is an early, independent read
-on commodity flows and shipping activity that price charts alone do not
-show. The feed is fast and unforgiving, so the package is built to keep
-up without dropping the connection, reconnecting and re-subscribing on
-its own if the link breaks. You supply an access key and the areas to
-watch; the package keeps the ships flowing in.
+Ships at sea constantly broadcast who they are and where they are, a
+public signal called AIS. This package opens a live connection to a feed
+of those broadcasts and hands them to your R program as they arrive, so
+you can watch vessel positions in near-real-time — narrowed to the sea
+areas, ships, or message kinds you care about — and write the raw stream
+straight to disk to study later. For a trading system it is an
+alternative-data source: the movement of tankers, bulk carriers and
+container ships is an early, independent read on commodity flows and
+shipping activity that price charts alone do not show. The feed is fast
+and unforgiving, so the package is built to keep up without dropping the
+connection, reconnecting and re-subscribing on its own if the link
+breaks. You supply an access key and the areas to watch; the package
+keeps the ships flowing in.
 
 ## Technical overview
 
