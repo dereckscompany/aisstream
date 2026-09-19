@@ -1,3 +1,14 @@
+# aisstream 0.2.3
+
+## Removed a leftover scaffolding label from the README
+
+**The README opened with a "In plain terms:" tag in front of its lead sentence; that tag is gone and the sentence now simply opens the page on its own.** A repo-wide sweep of the package's prose — the README, the vignette, `NEWS.md`, and every roxygen and code comment — checked for two things: leftover "plain English" / "technically" scaffolding labels, and American spellings that should read as British ones. Only the one label turned up; no spelling conversions were needed anywhere, because the package's comments and documentation already use British spelling throughout (`modelling`, `normalisation`, `deserialises`, and so on).
+
+* 1 scaffolding label removed (`**In plain terms:**` in front of `README.Rmd`'s opening summary paragraph); the sentence it introduced is kept, unbolded, as the page's plain-English opening line.
+* 0 American-to-British spelling changes; a case-insensitive, word-bounded grep for the full target list (the `-ise`/`-our`/`-re`/`-ogue`/`-ence`/`-ll-` families, `grey`, `artefact`, `cheque`, `programme`) across `README.Rmd`, `vignettes/recording-ais.Rmd`, `NEWS.md`, and every `#`/`#'` comment in `R/`, `scripts/`, and `tests/` found no in-scope hits; the handful of raw string matches (`initialize` as the R6 method name, `center` as a knitr chunk-option value, `program` meaning software, build-artifact wording inside the template-managed `scripts/BUILD.sh` and `scripts/CLEANUP.sh`, which are never edited inside a package) are code, identifiers or template files, not this package's prose, and were left untouched.
+* 2 prose files touched: `README.Rmd` (edited) and the regenerated `README.md` (via `bash scripts/BUILD.sh readme`), plus this `NEWS.md` entry and the `DESCRIPTION` version bump; no `man/` regeneration was needed since no roxygen line changed.
+* No code change; documentation only.
+
 # aisstream 0.2.2
 
 ## Replaced the remaining real-format MMSIs in the rendered docs
