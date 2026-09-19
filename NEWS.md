@@ -1,3 +1,17 @@
+# aisstream 0.2.4
+
+## The README now follows the fleet's one canonical shape
+
+**The README is now laid out the same way every other package in the fleet is, so a reader who knows one package's docs already knows where to look in this one.** The heading order, the wording of most sections, and every code example are unchanged; what moved is the shape around them: a bold opening sentence, a renamed design section, a renv-first install block, and new closing sections that point to the rendered documentation site and say how to cite the package.
+
+* `## Why it is shaped this way` renamed to `## Design philosophy`; `## Constructing a client and inspecting the subscription` renamed to `## Quick start`; `## License` renamed to `## Licence`; no prose in any of the three changed.
+* The opening paragraph's first sentence is now bold, matching the fleet's unlabelled bold-lead-sentence convention; the rest of the paragraph is unchanged.
+* `## Installation` gains a commented `remotes::install_github()` fallback inside the same code fence, alongside the existing `renv::install()` call.
+* Two sections are new: `## Error handling`, a runnable example catching the `aisstream_validation_error` a malformed bounding box raises, and noting that a transport failure is instead `connectcore_stream_error`; and `## Documentation`, naming the pkgdown site and the one `recording-ais` vignette.
+* `## Citation` is new, built from `DESCRIPTION`: author, ORCID, this version, and the repository URL.
+* `## Asynchronous usage` is omitted: `AisStream` is a single blocking WebSocket client driven by `$run()`, not a promise-based dual-mode client, so there is no async variant to document.
+* No code change; documentation only.
+
 # aisstream 0.2.3
 
 ## Removed a leftover scaffolding label from the README
