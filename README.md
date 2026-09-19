@@ -5,13 +5,13 @@
 
 <!-- badges: end -->
 
-Ships at sea constantly broadcast who they are and where they are, a
-public signal called AIS. This package opens a live connection to a feed
-of those broadcasts and hands them to your R program as they arrive, so
-you can watch vessel positions in near-real-time — narrowed to the sea
-areas, ships, or message kinds you care about — and write the raw stream
-straight to disk to study later. For a trading system it is an
-alternative-data source: the movement of tankers, bulk carriers and
+**Ships at sea constantly broadcast who they are and where they are, a
+public signal called AIS.** This package opens a live connection to a
+feed of those broadcasts and hands them to your R program as they
+arrive, so you can watch vessel positions in near-real-time — narrowed
+to the sea areas, ships, or message kinds you care about — and write the
+raw stream straight to disk to study later. For a trading system it is
+an alternative-data source: the movement of tankers, bulk carriers and
 container ships is an early, independent read on commodity flows and
 shipping activity that price charts alone do not show. The feed is fast
 and unforgiving, so the package is built to keep up without dropping the
@@ -29,7 +29,7 @@ filters, and handle raw frames Node-ws style. Reconnect, re-subscribe,
 keepalive and a silence watchdog are inherited; parse helpers and a
 durable NDJSON recorder are included.
 
-## Why it is shaped this way
+## Design philosophy
 
 AISStream is **WebSocket-only** (no REST). On connect you must send one
 JSON subscription within three seconds or the server drops you, and —
@@ -51,9 +51,12 @@ This package uses [renv](https://rstudio.github.io/renv/):
 
 ``` r
 renv::install("dereckscompany/aisstream")
+
+# or, without renv:
+# remotes::install_github("dereckscompany/aisstream")
 ```
 
-## Constructing a client and inspecting the subscription
+## Quick start
 
 Everything below is **network-free** — no socket is opened. We build a
 client and look at the exact subscription frame it would send.
@@ -159,6 +162,54 @@ head(unlist(AIS_MESSAGE_TYPES, use.names = FALSE))
 #> [4] "AddressedBinaryMessage" "AidsToNavigationReport" "AssignedModeCommand"
 ```
 
-## License
+## Error handling
+
+``` r
+result <- tryCatch(
+  AisStream$new(
+    api_key = "DEMO-KEY",
+    bounding_boxes = list(list(min_lat = -90, min_lon = -180, max_lat = 190, max_lon = 180))
+  ),
+  aisstream_validation_error = function(e) paste("caught:", conditionMessage(e))
+)
+result
+#> [1] "caught: Bounding-box latitudes must lie in [-90, 90]."
+```
+
+A malformed subscription argument or an empty API key raises
+`aisstream_validation_error` (nested in the connector’s own
+`aisstream_error` root), always before a socket opens. A transport
+failure once connected – a failed connect, a broken reconnect, a stale
+keepalive – is raised instead by `connectcore::StreamClient` as
+`connectcore_stream_error` (nested in `connectcore_error`), so
+validation failures and transport failures never share a root and can be
+caught separately.
+
+## Documentation
+
+The rendered reference site is at
+[dereckscompany.github.io/aisstream](https://dereckscompany.github.io/aisstream/).
+
+The vignette ladder, in reading order:
+
+- `vignette("recording-ais", package = "aisstream")` – why the message
+  hot path must stay parse-free, how `ndjson_sink()` records raw frames
+  durably and rolls by UTC hour, parsing a recording offline, and
+  swapping a live subscription.
+
+Release history is in [`NEWS.md`](NEWS.md).
+
+## Citation
+
+Cite as:
+
+> Mezquita, D. (2026). aisstream: Live Vessel-Tracking Stream Client for
+> AISStream.io. R package version 0.2.4.
+> <https://github.com/dereckscompany/aisstream>.
+
+Author: Dereck Mezquita – [ORCID:
+0000-0002-9307-6762](https://orcid.org/0000-0002-9307-6762)
+
+## Licence
 
 MIT
